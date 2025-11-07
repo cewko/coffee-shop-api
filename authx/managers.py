@@ -57,6 +57,7 @@ class CustomUserManager(BaseUserManager):
         )
         user.is_admin = True
         user.is_staff = True
+        user.is_superuser = True
         user.role = 4
         user.save(using=self._db)
 
