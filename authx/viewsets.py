@@ -9,5 +9,5 @@ User = get_user_model()
 
 class UserViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
-    queryset = User.objects.all().order_by("-date_joined")
+    queryset = User.objects.all()
     serializer_class = UserSerializer

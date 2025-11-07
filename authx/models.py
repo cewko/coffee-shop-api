@@ -22,6 +22,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         _("User role"), choices=ROLES, default=1
     )
 
+    join_date = models.DateTimeField(
+        _("User Join Date"),
+        auto_now_add=True
+    )
+    last_login = models.DateTimeField(
+        _("Last Login Date"),
+        null=True, blank=True
+    )
+
     objects = CustomUserManager()
 
     USERNAME_FIELD = "username"
