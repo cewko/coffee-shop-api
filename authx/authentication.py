@@ -1,9 +1,11 @@
 import json
+import hmac
+import hashlib
 
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
+from django.conf import settings
 
-from rest_framework import HTTP_HEADER_ENCODING, authentication
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
 
@@ -40,6 +42,12 @@ class TokenAuthentication(BaseAuthentication):
                 code="invalid_token"
             )
 
+        if not self.verify_signature(segments[0], segments[1], segments[2]):
+            raise AuthenticationFailed(
+                _("Invalid token signature"),
+                code="invalid_signature"
+            )
+
         try:
             validated_token = decode_jwt(segments[1])
         except Exception as error:
@@ -50,8 +58,24 @@ class TokenAuthentication(BaseAuthentication):
 
         return self.get_user(validated_token), validated_token
 
+    def verify_signature(self, header, payload, signature):
+        message = f"{header}.{payload}"
+        expected_signature = hmac.new(
+            settings.SECRET_KEY.encode(),
+            message.encode(),
+            hashlib.sha256
+        ).hexdigest()
+
+        try:
+            decoded_signature = decode_jwt(signature).decode("utf-8")
+        except Exception:
+            return False
+
+        return hmac.compare_digest(expected_signature, decoded_signature)
+
     def get_user(self, validated_token):
         res = json.loads(validated_token)
+        
         try:
             user_id = res.get("id")
         except KeyError:
