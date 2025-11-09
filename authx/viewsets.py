@@ -37,7 +37,7 @@ class UserViewSet(ModelViewSet):
         mail_subject = _("Activate your account")
         protocol = "https" if self.request.is_secure() else "http"
 
-        url = f"{protocol}://{domain}/rest-api/v1/auth/activate/{uid}/{token}"
+        url = f"{protocol}://{domain}/rest-api/v1/authx/activate/{uid}/{token}"
         message = f"""
         <html>
             <body>
