@@ -1,6 +1,7 @@
 import json
 import hmac
 import hashlib
+from datetime import datetime
 
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
@@ -9,8 +10,8 @@ from django.conf import settings
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
 
-from datetime import datetime
 from .jwt import decode_jwt
+from .models import BlackListToken
 
 
 User = get_user_model()
@@ -28,6 +29,12 @@ class TokenAuthentication(BaseAuthentication):
 
         if token.startswith("Bearer "):
             token = token[7:]
+
+        if BlackListToken.objects.filter(token=token).exists():
+            raise AuthenticationFailed(
+                _("Token has been revoked"),
+                code="token_revoked"
+            )
 
         segments = token.split(".")
 

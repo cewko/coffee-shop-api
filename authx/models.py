@@ -42,3 +42,30 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return str(self.full_name)
+
+
+class BlackListToken(models.Model):
+    token = models.CharField(
+        max_length=500,
+        unique=True,
+        db_index=True
+    )
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name="blacklisted_tokens"
+    )
+    blacklisted_at = models.DateTimeField(auto_now_add=True)
+    reason = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Why was this token blacklisted?"
+    )
+
+    class Meta:
+        verbose_name = _("Blacklisted Token")
+        verbose_name_plural = _("Blacklisted Tokens")
+        ordering = ["-blacklisted_at"]
+
+    def __str__(self):
+        return f"{self.user.username}'s token"
