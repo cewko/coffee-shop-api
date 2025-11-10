@@ -8,6 +8,7 @@ from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 from rest_framework.response import Response
@@ -19,6 +20,7 @@ User = get_user_model()
 
 
 class LoginView(APIView):
+    throttle_classes = [AnonRateThrottle]
     permission_classes = [AllowAny]
     authentication_classes = []
 
