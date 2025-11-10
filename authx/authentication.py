@@ -9,6 +9,7 @@ from django.conf import settings
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
 
+from datetime import datetime
 from .jwt import decode_jwt
 
 
@@ -75,6 +76,9 @@ class TokenAuthentication(BaseAuthentication):
 
     def get_user(self, validated_token):
         res = json.loads(validated_token)
+        exp = res.get("exp")
+        if exp and datetime.fromtimestamp(exp) < datetime.now():
+            raise AuthenticationFailed("Token has expired")
         
         try:
             user_id = res.get("id")
