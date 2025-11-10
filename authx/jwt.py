@@ -8,8 +8,8 @@ import hashlib
 
 
 def default_converter(o):
-    if isinstance(0, datetime):
-        return o.__str__()
+    if isinstance(o, datetime):
+        return int(o.timestamp())
 
 
 def decode_jwt(data):
