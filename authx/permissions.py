@@ -3,7 +3,7 @@ from rest_framework.permissions import BasePermission
 
 class isCashier(BasePermission):
     def has_permission(self, request, view):
-        return bool(request.user.is_authenticated and request.user.role >= 0)
+        return bool(request.user.is_authenticated and request.user.role >= 1)
 
 
 class IsBarista(BasePermission):
