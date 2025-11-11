@@ -2,14 +2,14 @@ from django.urls.conf import include
 from django.urls import re_path
 
 from rest_framework.routers import DefaultRouter
-from .viewsets import SupplierViewSet
+from .viewsets import IngredientViewSet
 
 
 router = DefaultRouter()
 router.register(
     r"",
-    SupplierViewSet,
-    basename="suppliers"
+    IngredientViewSet,
+    basename="ingredients"
 )
 
 urlpatterns = [
