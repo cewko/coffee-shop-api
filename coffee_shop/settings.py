@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'authx',
     'supplier',
     'storage',
+    'menu',
 ]
 
 MIDDLEWARE = [

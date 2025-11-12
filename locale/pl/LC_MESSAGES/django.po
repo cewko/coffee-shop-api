@@ -21,16 +21,16 @@ msgstr ""
 "n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 #: authx/common.py:5
 msgid "Cashier"
-msgstr ""
+msgstr "Kasjer"
 
 #: authx/common.py:6
 msgid "Barista"
-msgstr ""
+msgstr "Barista"
 
 #: authx/common.py:7
 msgid "Manager"
-msgstr ""
+msgstr "Menadżer"
 
 #: authx/common.py:8
 msgid "Owner"
-msgstr ""
+msgstr "Właściciel"
