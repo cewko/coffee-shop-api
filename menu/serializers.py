@@ -1,5 +1,10 @@
-from rest_framework.serializers import ModelSerializer, SlugRelatedField
+from rest_framework.serializers import (
+    ModelSerializer, 
+    SlugRelatedField, 
+    PrimaryKeyRelatedField
+)
 from storage.serializers import BaristaIngredientSerializer, ManagerIngredientSerializer
+from storage.models import Ingredient
 
 from .models import Menu, MenuItem, Component
 
@@ -56,3 +61,24 @@ class AdminMenuSerializer(BaseMenuSerializer):
 
 class CashierMenuSerializer(BaseMenuSerializer):
     items = CashierMenuItemSerializer(read_only=True, many=True)
+
+
+class CreateMenuItemSerializer(BaseItemSerializer):
+    ingredients = PrimaryKeyRelatedField(
+        many=True,
+        queryset=Component.objects.all()
+    )
+
+
+class CreateMenuSerializer(BaseMenuSerializer):
+    items = PrimaryKeyRelatedField(
+        many=True,
+        queryset=MenuItem.objects.all()
+    )
+
+
+class CreateComponentSerializer(BaseComponentSerializer):
+    components = PrimaryKeyRelatedField(
+        many=True,
+        queryset=Ingredient.objects.all()
+    )
