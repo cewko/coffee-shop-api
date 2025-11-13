@@ -1,5 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
-from authx.permissions import IsCashier, IsBarista, IsManager
+from authx.permissions import MenuViewPermission
 from .serializers import (
     MenuSerializer,
     CashierMenuSerializer,
@@ -15,7 +15,7 @@ from .models import Menu, MenuItem, Component
 
 class MenuViewSet(ModelViewSet):
     queryset = Menu.objects.all()
-    permission_classes = [IsCashier]
+    permission_classes = [MenuViewPermission]
     
     def get_serializer_class(self):
         if self.request.user.role == 1:
@@ -28,7 +28,7 @@ class MenuViewSet(ModelViewSet):
 
 class MenuItemViewSet(ModelViewSet):
     queryset = MenuItem.objects.all()
-    permission_classes = [IsCashier]
+    permission_classes = [MenuViewPermission]
     
     def get_serializer_class(self):
         if self.request.user.role == 1:
@@ -41,7 +41,7 @@ class MenuItemViewSet(ModelViewSet):
 
 class ComponentViewSet(ModelViewSet):
     queryset = Component.objects.all()
-    permission_classes = [IsBarista]
+    permission_classes = [MenuViewPermission]
     
     def get_serializer_class(self):
         if self.request.user.role >= 3:
