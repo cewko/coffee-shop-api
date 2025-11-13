@@ -1,6 +1,9 @@
 from rest_framework.viewsets import ModelViewSet
 from authx.permissions import MenuViewPermission
 from .serializers import (
+    CreateMenuItemSerializer,
+    CreateMenuSerializer,
+    CreateComponentSerializer,
     MenuSerializer,
     CashierMenuSerializer,
     MenuItemSerializer,
@@ -21,8 +24,12 @@ class MenuViewSet(ModelViewSet):
         if self.request.user.role == 1:
             return CashierMenuSerializer
         elif self.request.user.role >= 3:
+            if self.action in ["update", "partial_update", "create"]:
+                return CreateMenuSerializer
             return AdminMenuSerializer
         else:
+            if self.action in ["update", "partial_update", "create"]:
+                return CreateMenuSerializer
             return MenuSerializer
 
 
@@ -34,8 +41,12 @@ class MenuItemViewSet(ModelViewSet):
         if self.request.user.role == 1:
             return CashierMenuItemSerializer
         elif self.request.user.role >= 3:
+            if self.action in ["update", "partial_update", "create"]:
+                return CreateMenuItemSerializer
             return ManagerMenuItemSerializer
         else:
+            if self.action in ["update", "partial_update", "create"]:
+                return CreateMenuItemSerializer
             return MenuItemSerializer
 
 
@@ -45,6 +56,8 @@ class ComponentViewSet(ModelViewSet):
     
     def get_serializer_class(self):
         if self.request.user.role >= 3:
+            if self.action in ["update", "partial_update", "create"]:
+                return CreateComponentSerializer
             return ManagerComponentSerializer
         else:
             return ComponentSerializer
