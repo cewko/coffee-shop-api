@@ -51,7 +51,7 @@ class MenuSerializer(BaseMenuSerializer):
 
 
 class AdminMenuSerializer(BaseMenuSerializer):
-    items = ManagerManuItemSerializer(read_only=True, many=True)
+    items = ManagerMenuItemSerializer(read_only=True, many=True)
 
 
 class CashierMenuSerializer(BaseMenuSerializer):

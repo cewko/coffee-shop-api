@@ -6,4 +6,5 @@ urlpatterns = [
     path("authx/", include("authx.urls")),
     path("supplier/", include("supplier.urls")),
     path("ingredients/", include("storage.urls")),
+    path("menu/", include("menu.urls")),
 ]
