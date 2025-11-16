@@ -17,8 +17,7 @@ from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 from rest_framework.response import Response
 
-from .jwt import create_jwt
-from .models import BlackListToken
+from .services import TokenService
 
 User = get_user_model()
 
@@ -56,7 +55,7 @@ class LoginView(APIView):
             "iat": current_time     # issued at
         }
 
-        token = create_jwt(payload)
+        token = TokenService.create_access_token(user)
 
         return Response({
             "jwt": token,
@@ -73,11 +72,9 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        token = request.META.get("HTTP_AUTHORIZATION")
-        if token.startswith("Bearer "):
-            token = token[7:]
+        token = request.auth
 
-        BlackListToken.objects.create(
+        TokenService.blacklist_token(
             token=token,
             user=request.user,
             reason="user logout"
