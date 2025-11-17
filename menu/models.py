@@ -10,7 +10,7 @@ class Component(models.Model):
 
     @property
     def name(self):
-        return "{} - {} - {}".format(
+        return "{} - {}{}".format(
             self.ingredient.name,
             self.quantity,
             self.ingredient.get_unit_display()
