@@ -78,7 +78,6 @@ class CreateMenuSerializer(BaseMenuSerializer):
 
 
 class CreateComponentSerializer(BaseComponentSerializer):
-    components = PrimaryKeyRelatedField(
-        many=True,
+    ingredient = PrimaryKeyRelatedField(
         queryset=Ingredient.objects.all()
     )
