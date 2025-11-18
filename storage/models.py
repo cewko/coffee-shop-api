@@ -19,7 +19,7 @@ class Ingredient(models.Model):
         max_length=50, 
         unique=True,
     )
-    quantity = models.IntegerField(_("Quantity"), default=0)
+    quantity = models.PositiveIntegerField(_("Quantity"), default=0)
     supplier = models.ForeignKey(
         "supplier.Supplier",
         on_delete=models.SET_NULL,

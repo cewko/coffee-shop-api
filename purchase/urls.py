@@ -1,5 +1,5 @@
 from django.urls.conf import include
-from django.urls import re_path
+from django.urls import re_path, path
 
 from rest_framework.routers import DefaultRouter
 from .views import PurchaseListView
