@@ -7,4 +7,5 @@ urlpatterns = [
     path("supplier/", include("supplier.urls")),
     path("ingredients/", include("storage.urls")),
     path("menu/", include("menu.urls")),
+    paht("purchase/", include("purchase.urls"))
 ]
