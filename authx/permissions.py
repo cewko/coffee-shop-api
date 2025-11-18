@@ -8,7 +8,7 @@ class RolePermission(BasePermission):
         return (
             request.user
             and request.user.is_authenticated
-            and request.user.role >= required_role
+            and request.user.role >= self.required_role
         )
 
 

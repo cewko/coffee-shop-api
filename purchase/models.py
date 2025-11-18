@@ -35,33 +35,34 @@ class PurchaseOrder(models.Model):
     def __str__(self):
         return f"{self.order_number} - {self.get_status_display()}"
 
-    def change_storage(instance, **kwargs):
-        action = kwargs.get("action")
-        pk_set = kwargs.get("pk_set")
 
-        all_quantity = {}
-        obj = []
+def change_storage(instance, **kwargs):
+    action = kwargs.get("action")
+    pk_set = kwargs.get("pk_set")
 
-        for id in pk_set:
-            item = MenuItem.objects.get(pk=id)
+    all_quantity = {}
+    obj = []
 
-            for component in item.ingredients.all():
-                if component.pk in all_quantity:
-                    all_quantity[component.pk] += component.quantity
-                else:
-                    all_quantity[component.pk] = component.quantity
+    for id in pk_set:
+        item = MenuItem.objects.get(pk=id)
 
-            for key in all_quantity.keys():
-                all_res = all_quantity[key]
-                new_obj = Component.objects.get(pk=key).ingredient
-                
-                if action == "post_add":
-                    new_obj.quantity = F("quantity") - all_res
-                if action == "post_remove":
-                    new_obj.quantity = F("quantity") + all_res
+        for component in item.ingredients.all():
+            if component.pk in all_quantity:
+                all_quantity[component.pk] += component.quantity
+            else:
+                all_quantity[component.pk] = component.quantity
 
-                obj.append(new_obj)
+        for key in all_quantity.keys():
+            all_res = all_quantity[key]
+            new_obj = Component.objects.get(pk=key).ingredient
 
-        Ingredient.objects.bulk_update(obj, ["quantity"])
+            if action == "post_add":
+                new_obj.quantity = F("quantity") - all_res
+            if action == "post_remove":
+                new_obj.quantity = F("quantity") + all_res
+
+            obj.append(new_obj)
+
+    Ingredient.objects.bulk_update(obj, ["quantity"])
 
 m2m_changed.connect(change_storage, sender=PurchaseOrder.items.through)

@@ -13,6 +13,7 @@ router.register(
 )
 
 urlpatterns = [
-    re_path(r"", include(router.urls)),
-    path("purchase-list", PurchaseListView.as_view(), name="purchase-list")
+    path("list/", PurchaseListView.as_view(), name="purchase-list"),
+    re_path(r"", include(router.urls))
+
 ]
