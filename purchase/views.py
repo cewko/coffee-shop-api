@@ -1,3 +1,4 @@
+from datetime import datetime
 from rest_framework.generics import ListAPIView, get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
@@ -9,10 +10,19 @@ from .models import PurchaseOrder
 
 
 class PurchaseListView(ListAPIView):
-    queryset = PurchaseOrder.objects.all()
     serializer_class = ListPurchaseOrderSerializer
     permission_classes = [AllowAny]
 
+    def get_queryset(self):
+        queryset = PurchaseOrder.objects.filter(
+            created_date__date=datetime.now().date()
+        )
+        status = self.request.query_params.get("status")
+        if status is not None:
+            queryset = queryset.filter(status__in=status.split(","))
+
+        return queryset
+    
 
 class CancellingPurchase(APIView):
     permission_classes = [IsCashier]
