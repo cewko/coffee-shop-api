@@ -38,7 +38,14 @@ class CreatePurchaseOrderSerializer(PurchaseOrderSerializer):
         count_today = PurchaseOrder.objects.filter(
             created_date__date=today.date()
         ).count() + 1
+        user = None
+        request = self.context.get("request")
+
+        if request and hasattr(request, "user"):
+            user = request.user
+
         data["order_number"] = f"{today.strftime('%d%m%y')}_{count_today}"
+        data["created_by"] = user.pk
 
         return super().to_internal_value(data)
 
@@ -60,3 +67,12 @@ class CreatePurchaseOrderSerializer(PurchaseOrderSerializer):
                     raise ValidationError(_("Not enough ingredients in stock"))
 
         return super().validate(data)
+
+
+class PurchaseOrderSerializerCancelling(ModelSerializer):
+    status = CharField(source="get_status_display", read_only=True)
+
+    class Meta:
+        model = PurchaseOrder
+        fields = ["status", "order_number"]
+        read_only_fields = ["status", "order_number"]
