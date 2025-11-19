@@ -1,4 +1,10 @@
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.mixins import (
+    CreateModelMixin,
+    ListModelMixin,
+    RetrieveModelMixin,
+    UpdateModelMixin
+)
 
 from authx.permissions import IsCashier
 from .serializers import (
@@ -9,7 +15,13 @@ from .serializers import (
 from .models import PurchaseOrder
 
 
-class PurchaseViewSet(ModelViewSet):
+class PurchaseViewSet(
+        CreateModelMixin,
+        ListModelMixin,
+        RetrieveModelMixin,
+        UpdateModelMixin,
+        GenericViewSet
+    ):
     queryset = PurchaseOrder.objects.all()
     permission_classes = [IsCashier]
 
