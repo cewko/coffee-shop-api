@@ -13,10 +13,12 @@ from rest_framework.response import Response
 from .permissions import IsOwner
 from .serializers import UserSerializer
 
+from utils.mixins import CustomLoggingViewSetMixin
+
 User = get_user_model()
 
 
-class UserViewSet(ModelViewSet):
+class UserViewSet(CustomLoggingViewSetMixin, ModelViewSet):
     permission_classes = [IsOwner]
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -58,7 +60,9 @@ class UserViewSet(ModelViewSet):
         email.send()
 
     def perform_create(self, serializer):
-        user = serializer.save()
+        super().perform_create(serializer)
+
+        user = serializer.instance
         user.is_active = False
         user.save()
 

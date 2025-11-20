@@ -6,9 +6,10 @@ from .serializers import (
     ManagerIngredientSerializer
 )
 from .models import Ingredient
+from utils.mixins import CustomLoggingViewSetMixin
 
 
-class IngredientViewSet(ModelViewSet):
+class IngredientViewSet(CustomLoggingViewSetMixin, ModelViewSet):
     queryset = Ingredient.objects.all()
     permission_classes = [IsBarista]
 

@@ -13,9 +13,11 @@ from .serializers import (
 )
 
 from .models import PurchaseOrder
+from utils.mixins import CustomLoggingViewSetMixin
 
 
 class PurchaseViewSet(
+        CustomLoggingViewSetMixin,
         CreateModelMixin,
         ListModelMixin,
         RetrieveModelMixin,

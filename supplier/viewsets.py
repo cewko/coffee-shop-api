@@ -2,9 +2,10 @@ from rest_framework.viewsets import ModelViewSet
 from authx.permissions import IsManager, IsCashier
 from .serializers import AdminSupplierSerializer, SupplierSerializer
 from .models import Supplier
+from utils.mixins import CustomLoggingViewSetMixin
 
 
-class SupplierViewSet(ModelViewSet):
+class SupplierViewSet(CustomLoggingViewSetMixin, ModelViewSet):
     queryset = Supplier.objects.all()
     
     def get_serializer_class(self):

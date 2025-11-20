@@ -52,7 +52,7 @@ class CustomLoggingMixin:
         self.log(operation=DELETION, instance=instance)
 
 
-class CustomLoggingViewSetMixin(CustomLogginMixin):
+class CustomLoggingViewSetMixin(CustomLoggingMixin):
     def perform_create(self, serializer):
         super().perform_create(serializer)
         self.log_create(serializer)
